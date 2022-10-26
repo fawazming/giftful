@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Project Phi</title>
+    <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+
+<body>
+    <div id="page" class="container mt-5 d-md-flex">
+        <div class="text-center">
+            <h2 class="display-3 text-center">Login</h2><img src="img/logo.png" class="m-auto img-fluid" width="60%" alt="">
+        </div>
+        <div class="container">
+            <form id="login">
+                <div class="form-group row mb-2"><input type="text" class="form-control" name="uname" id="uname" placeholder="Username e.g @fawazpro" required></div>
+                <div class="form-group row mb-2"><input type="password" class="form-control" name="pass" id="pass" placeholder="Password" required></div>
+                <div class="form-group row"><button type="submit" class="btn btn-primary">Sign In</button></div>
+            </form>
+        </div>
+        <div class="container d-none" id="dashboard">
+            <div class="container">
+                <header class="d-flex justify-content-between">
+                    <h1>Dashboard</h1><button id="logout" class="btn btn-sm btn-danger">Logout</button>
+                </header>
+                <div class="container">
+                    <div class="card mt-3">
+                        <div class="card-body p-2">
+                            <blockquote class="blockquote mb-0">
+                                <p class="display-1" id="balance"></p>
+                            </blockquote>
+                        </div>
+                    </div>
+                    <form class="mt-4" id="basicData">
+                        <div class="form-group row"><label for="phone" class="col-sm-1-12 col-form-label">Mobile Number</label>
+                            <div class="col-sm-1-12"><input type="number" required class="form-control" name="phone" id="phone" placeholder="08023456787"></div>
+                        </div>
+                        <div class="form-group row"><label for="phone" class="col-sm-1-12 col-form-label">Select Network Provider</label>
+                            <div class="ml-2 d-flex">
+                                <div class="form-check form-check-inline"><label class="form-check-label"><input class="form-check-input" type="radio" name="network" value="01"> MTN</label></div>
+                                <div class="form-check form-check-inline"><label class="form-check-label"><input class="form-check-input" type="radio" name="network" value="04"> ARL</label></div>
+                                <div class="form-check form-check-inline"><label class="form-check-label"><input class="form-check-input" type="radio" name="network" value="02"> GLO</label></div>
+                                <div class="form-check form-check-inline"><label class="form-check-label"><input class="form-check-input" type="radio" name="network" value="03"> 9Mb</label></div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <ul data-tabs class="d-flex mt-3">
+                                <li class="btn"><a href="#airtime">Airtime</a></li>
+                                <li for="Data" class="btn col-sm-1-12 col-form-li"><a data-tabby-default href="#dlists">Data</a></li>
+                            </ul>
+                            <div id="airtime"><label for="phone" class="col-sm-1-12 col-form-label">Amount to Recharge</label>
+                                <div class="col-sm-1-12"><input type="number" class="form-control" name="amt" id="amt" placeholder="100-5,000"></div>
+                                <div class="col-sm-1-12 pt-2"><a onclick="airtime()" href="#!" class="form-control btn btn-warning">Buy Airtime</a></div>
+                            </div>
+                            <div class="row m-0" id="dlists"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="tabby.js"></script>
+    <script>
+    var tabs = new Tabby('[data-tabs]');
+    </script>
+    <script src="main.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Giftful</title>
+    <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+
+<body>
+    <div id="page" class="container mt-1 mb-5 pb-5">
+        <div class="d-flex mb-4 sticky-top bg-light">
+            <img src="img/logo.png" class="m-auto img-fluid" width="60%" alt="Giftful">
+            <div class="d-flex flex-column">
+                <small class="text-end">Balance</small>
+                <h2 class="display-3 text-center">₦456</h2>
+            </div>
+        </div>
+        <div class="container px-md-5 mx-md-5">
+            <div class="container">
+                <header class="d-flex justify-content-between">
+                    <h1>Dashboard</h1>
+                    <a href="#pin" class="btn btn-sm btn-primary">Load Pin</a>
+                    <button id="logout" class="btn btn-sm btn-danger">Logout</button>
+                </header>
+                <div class="container">
+                    <div class="card mt-3">
+                        <div class="card-body p-1 d-flex">
+                            <img src="p5.jpg" class="img-fluid" alt="">
+                            <img src="p5.jpg" class="d-none d-md-block img-fluid" alt="">
+                            <img src="p5.jpg" class="d-none d-md-block img-fluid" alt="">
+                        </div>
+                    </div>
+                    <form class="mt-4 mb-4" id="basicData">
+                        <div class="form-group row"><label for="phone" class="col-sm-1-12 col-form-label">Mobile Number</label>
+                            <div class="col-sm-1-12"><input type="number" required class="form-control" name="phone" id="phone" placeholder="08023456787"></div>
+                        </div>
+                        <div class="form-group row"><label for="netw" class="col-sm-1-12 col-form-label">Select Network Provider</label>
+                            <div class="ml-2 d-flex">
+                                <div class="form-check form-check-inline"><label class="form-check-label"><input class="form-check-input" type="radio" name="network" value="01"> MTN</label></div>
+                                <div class="form-check form-check-inline"><label class="form-check-label"><input class="form-check-input" type="radio" name="network" value="04"> ARL</label></div>
+                                <div class="form-check form-check-inline"><label class="form-check-label"><input class="form-check-input" type="radio" name="network" value="02"> GLO</label></div>
+                                <div class="form-check form-check-inline"><label class="form-check-label"><input class="form-check-input" type="radio" name="network" value="03"> 9Mb</label></div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="row m-0" id="dlists"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="fixed-bottom bg-primary text-center">
+        <p class="text-light mb-0">Owned by <a href="https://rayyantech.sgm.ng" class="text-light">Rayyantech</a> </p>
+    </footer>
+    <script>
+    function dataBuy(e) { null == localStorage.getItem("phiLogin") ? (localStorage.setItem("phiLogin", "logout"), location.reload()) : confirm(`Are you certain that you want to buy ${e} ?`) ? proceedBuy(e) : console.log("okay")
+    }
+
+    function proceedBuy(e) {
+        document.querySelector("#basicData").addEventListener("submit", t => {
+            t.preventDefault();
+            let n = document.querySelector("#phone").value,
+                a = document.querySelector("[name=netw]").value;
+            console.log(e, n, a), fetch(`https://www.nellobytesystems.com/APIDatabundleV1.asp?UserID=CK8102&APIKey=M2XJD61H4ELMJ308UHG7S1GVM34H533668D2ZL9YT663E1MYO6366JNEN75CB608&MobileNetwork=${a}&DataPlan=${e}&MobileNumber=${n}&CallBackURL=http://rayyan.com.ng`).then(e => e.json()).then(e => { console.log(e), location.reload() }).catch(e => console.error(e))
+        })
+    }
+
+    let t = document.querySelectorAll("[name=network]");
+
+    t[0].addEventListener("click", function() {
+        globnet = t[0].value;
+        let e = JSON.parse(dataPlans).MOBILE_NETWORK.MTN[0],
+            n = "";
+        e.PRODUCT.forEach(e => { n += `\n                <div class="col-6 p-1">\n                <input type="hidden" name="netw" value="${t[0].value}">\n                    <button style="border: 0 red solid;" class="btn p-0 bg-transparent" onclick="dataBuy(${e.PRODUCT_ID})">\n                        <div class="card">\n                            <div class="card-body p-1 text-center">\n                                <h3 class="mb-0 pb-1">${e.PRODUCT_NAME}</h3>\n                                <p class="card-text">&#x20a6;${Math.ceil(parseInt(e.PRODUCT_AMOUNT)+.428*parseInt(e.PRODUCT_AMOUNT))}--${Math.ceil(parseInt(e.PRODUCT_AMOUNT)+.225*parseInt(e.PRODUCT_AMOUNT))}</p>\n                            </div>\n                        </div>\n                    </button>\n                </div>\n                ` }), document.querySelector("#dlists").innerHTML = n
+    })
+
+    t[1].addEventListener("click", function() {
+        globnet = t[1].value;
+        let e = JSON.parse(dataPlans).MOBILE_NETWORK.Airtel[0],
+            n = "";
+        e.PRODUCT.forEach(e => { n += `\n                <div class="col-6 p-1">\n                <input type="hidden" name="netw" value="${t[1].value}">\n                    <button style="border: 0 red solid;" class="btn p-0 bg-transparent" onclick="dataBuy(${e.PRODUCT_ID})">\n                        <div class="card">\n                            <div class="card-body p-1 text-center">\n                                <h3 class="mb-0 pb-1">${e.PRODUCT_NAME}</h3>\n                                <p class="card-text">&#x20a6;${Math.ceil(parseInt(e.PRODUCT_AMOUNT))}</p>\n                            </div>\n                        </div>\n                    </button>\n                </div>\n                ` }), document.querySelector("#dlists").innerHTML = n
+    })
+
+    t[2].addEventListener("click", function() {
+        globnet = t[2].value;
+        let e = JSON.parse(dataPlans).MOBILE_NETWORK.Glo[0],
+            n = "";
+        e.PRODUCT.forEach(e => { n += `\n                <div class="col-6 p-1">\n                <input type="hidden" name="netw" value="${t[2].value}">\n                    <button style="border: 0 red solid;" class="btn p-0 bg-transparent" onclick="dataBuy(${e.PRODUCT_ID})">\n                        <div class="card">\n                            <div class="card-body p-1 text-center">\n                                <h3 class="mb-0 pb-1">${e.PRODUCT_NAME}</h3>\n                                <p class="card-text">&#x20a6;${Math.ceil(parseInt(e.PRODUCT_AMOUNT))}</p>\n                            </div>\n                        </div>\n                    </button>\n                </div>\n                ` }), document.querySelector("#dlists").innerHTML = n
+    })
+
+    t[3].addEventListener("click", function() {
+        globnet = t[3].value;
+        let e = JSON.parse(dataPlans).MOBILE_NETWORK["9mobile"][0],
+            n = "";
+        e.PRODUCT.forEach(e => { n += `\n                <div class="col-6 p-1">\n                <input type="hidden" name="netw" value="${t[3].value}">\n                    <button style="border: 0 red solid;" class="btn p-0 bg-transparent" onclick="dataBuy(${e.PRODUCT_ID})">\n                        <div class="card">\n                            <div class="card-body p-1 text-center">\n                                <h3 class="mb-0 pb-1">${e.PRODUCT_NAME}</h3>\n                                <p class="card-text">&#x20a6;${Math.ceil(parseInt(e.PRODUCT_AMOUNT)+0*parseInt(e.PRODUCT_AMOUNT))}--${Math.ceil(parseInt(e.PRODUCT_AMOUNT)+0*parseInt(e.PRODUCT_AMOUNT))}</p>\n                            </div>\n                        </div>\n                    </button>\n                </div>\n                ` }), document.querySelector("#dlists").innerHTML = n
+    })
+    </script>
+</body>
+
+</html>
