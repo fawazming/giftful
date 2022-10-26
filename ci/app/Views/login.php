@@ -1,7 +1,7 @@
 
 
     <div id="page" class="container mt-5">
-        <div class="d-flex mb-4">
+        <div class="d-flex justify-content-between mb-4">
             <img src="img/logo.png" class="img-fluid" width="70px" alt="Giftful">
             <h2 class="display-3 text-center">Login</h2>
         </div>

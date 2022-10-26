@@ -1,12 +1,12 @@
 
-        <div class="container px-md-5 mx-md-5">
-            <div class="container">
+        <div class="container ">
+            <div class="container-fluid">
                 <header class="d-flex justify-content-between">
                     <h1>Dashboard</h1>
                     <a href="lpin" class="btn btn-sm btn-primary">Load Pin</a>
                     <a href="logout" class="btn btn-sm btn-danger">Logout</a>
                 </header>
-                <div class="container">
+                <div class="container px-md-5 mx-md-5">
                     <div class="card mt-3">
                         <div class="card-body p-1 d-flex">
                             <img src="img/p5.jpg" class="img-fluid" alt="">
