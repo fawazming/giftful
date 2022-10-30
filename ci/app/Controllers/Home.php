@@ -241,6 +241,7 @@ class Home extends BaseController
                     $data = [
                         'pin'=>$pin,
                         'worth'=>$res[0]['worth'],
+                        'owner'=>$session->email,
                         'balBefore'=>$bal,
                     ];
                     // Log
@@ -270,25 +271,49 @@ class Home extends BaseController
             $amt = explode(',', $incoming['plan'])[2];
             $phone = $incoming['phone'];
 
-            $bal = $users->where('ky', $session->id)->find()[0]['bal'];
-            if($amt > $bal){
-                $this->msg('Insufficient Balance. <br> Your bill is ₦'.$amt.'  <br> Buy another plan lesser than ₦'.$bal);
+            if($plan == '00'){
+                $bal = $users->where('ky', $session->id)->find()[0]['bal'];
+                if($amt > $bal){
+                    $this->msg('Insufficient Balance. <br> Your bill is ₦'.$amt.'  <br> Buy another airtime lesser than ₦'.$bal);
+                }else{
+                    $users->update($session->ky, ['bal'=>($bal-$amt)]);
+                     // Call API
+                    $api = $this->api('https://www.nellobytesystems.com/APIAirtimeV1.asp?UserID='.$_ENV['userID'].'&APIKey='.$_ENV['CKkey'].'&MobileNetwork='.$network.'&Amount='.$amt.'&MobileNumber='.$phone.'&CallBackURL=http://rayyantech.sgm.ng');
+                    $data = [
+                        'network'=>$network,
+                        'amt'=>$amt,
+                        'owner'=>$session->email,
+                        'balBefore'=>$bal,
+                        'apiRes'=>$api->getBody(),
+                    ];
+                    // Log
+                    $Logs->insert(['type'=>'BuyAirtime','log'=>json_encode($data)]);
+                    $this->msg('Payment Successful <br> Your Airtime will arrive anytime soon');
+                }
             }else{
-                $users->update($session->ky, ['bal'=>($bal-$amt)]);
-                 // Call API
-                $api = $this->api('https://www.nellobytesystems.com/APIDatabundleV1.asp?UserID='.$_ENV['userID'].'&APIKey='.$_ENV['CKkey'].'&MobileNetwork='.$network.'&DataPlan='.$plan.'&MobileNumber='.$phone.'&CallBackURL=http://rayyantech.sgm.ng');
-                // https://www.nellobytesystems.com/APIDatabundleV1.asp?UserID=CK8102&APIKey=M2XJD61H4ELMJ308UHG7S1GVM34H533668D2ZL9YT663E1MYO6366JNEN75CB608&MobileNetwork=${a}&DataPlan=${e}&MobileNumber=${n}&CallBackURL=http://rayyan.com.ng
-                $data = [
-                    'network'=>$network,
-                    'plan'=>$plan,
-                    'amt'=>$amt,
-                    'balBefore'=>$bal,
-                    'apiRes'=>$api->getBody(),
-                ];
-                // Log
-                $Logs->insert(['type'=>'BuyData','log'=>json_encode($data)]);
-                $this->msg('Payment Successful <br> Your Data will arrive anytime soon');
+
+                $bal = $users->where('ky', $session->id)->find()[0]['bal'];
+                if($amt > $bal){
+                    $this->msg('Insufficient Balance. <br> Your bill is ₦'.$amt.'  <br> Buy another plan lesser than ₦'.$bal);
+                }else{
+                    $users->update($session->ky, ['bal'=>($bal-$amt)]);
+                     // Call API
+                    $api = $this->api('https://www.nellobytesystems.com/APIDatabundleV1.asp?UserID='.$_ENV['userID'].'&APIKey='.$_ENV['CKkey'].'&MobileNetwork='.$network.'&DataPlan='.$plan.'&MobileNumber='.$phone.'&CallBackURL=http://rayyantech.sgm.ng');
+                    // https://www.nellobytesystems.com/APIDatabundleV1.asp?UserID=CK8102&APIKey=M2XJD61H4ELMJ308UHG7S1GVM34H533668D2ZL9YT663E1MYO6366JNEN75CB608&MobileNetwork=${a}&DataPlan=${e}&MobileNumber=${n}&CallBackURL=http://rayyan.com.ng
+                    $data = [
+                        'network'=>$network,
+                        'plan'=>$plan,
+                        'amt'=>$amt,
+                        'owner'=>$session->email,
+                        'balBefore'=>$bal,
+                        'apiRes'=>$api->getBody(),
+                    ];
+                    // Log
+                    $Logs->insert(['type'=>'BuyData','log'=>json_encode($data)]);
+                    $this->msg('Payment Successful <br> Your Data will arrive anytime soon');
+                }
             }
+
 
 
         } else {
