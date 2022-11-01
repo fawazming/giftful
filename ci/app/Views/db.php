@@ -90,7 +90,11 @@
             }
         }
         function airtime() {
-            let n = `${document.querySelector("[name=network]").value}`
+            let n = '';
+            let an = document.querySelectorAll("[name=network]")
+            an.forEach((k)=>{
+               if(k.checked){n = k.value}
+            })
             let p = `${document.querySelector('#phone').value}`
             let e = `${n},00,${document.querySelector('#amt').value}`
             if(confirm(`Are you certain that you want to recharge ${p} ?`) == true){
